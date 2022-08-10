@@ -6,6 +6,10 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "OnlineSubsystem.h"
+#include "OnlineSubsystemUtils.h"
+#include <AccelByteUe4Sdk/Public/Core/AccelByteApiClient.h>
+#include "OnlineSubsystemAccelByte.h"
 #include "AccelByteAuth.generated.h"
 
 class UEditableTextBox;
@@ -14,7 +18,7 @@ class AOssTutorialMenuHUD;
 class UCanvasPanel;
 
 /**
- * Authentication Games Setup 
+ * Authentication Games Setup
  * This code covers AccelByte sevices including:
  *
  * - Login using AccelByte Account using OSS
@@ -30,36 +34,36 @@ public:
 	* Executed automatically on component construction
 	*/
 	UFUNCTION()
-	void OnClickLogoutButton();
-	
+		void OnClickLogoutButton();
+
 protected:
-	
+
 	virtual void NativeConstruct() override;
 
 	/**
 	* @brief Log In Menu Canvas Panel inside MainMenu Widget.
 	*/
 	UPROPERTY(meta = (BindWidget))
-	UCanvasPanel* CP_LoginMenu;
-	
+		UCanvasPanel* CP_LoginMenu;
+
 	/**
 	* @brief Editable Text Box for Username inside MainMenu Widget.
 	*/
 	UPROPERTY(meta = (BindWidget))
-	UEditableTextBox* Etb_Username;
-	
+		UEditableTextBox* Etb_Username;
+
 	/**
 	* @brief Editable Text Box for Password inside MainMenu Widget.
 	*/
 	UPROPERTY(meta = (BindWidget))
-	UEditableTextBox* Etb_Password;
-	
+		UEditableTextBox* Etb_Password;
+
 	/**
 	* @brief Take Button Log In inside MainMenu Widget.
 	*/
 	UPROPERTY(meta = (BindWidget))
-	UButton* Btn_Login;
-	
+		UButton* Btn_Login;
+
 	/**
 	 * @brief Instantiate all casting to the main menu HUD
 	 */
@@ -85,7 +89,7 @@ private:
 	* @brief Log an account in using AccelByte OSS.
 	*/
 	UFUNCTION()
-	void OnClickLoginButton();
+		void OnClickLoginButton();
 
 	/**
 	* @brief Called after Log In process is complete.
@@ -116,4 +120,18 @@ private:
 	* @brief Function behavior when Log Out process is succeeded.
 	*/
 	void LogoutFailed();
+
+	IOnlineIdentityPtr IdentityRef;
+
+	bool bSdkProcessRunning = false;
+
+	FApiClientPtr ApiClientRef;
+
+	FApiClientPtr WrapperGetApiClient(int32 LocalUserNum, FApiClientPtr PtrIn);
+
+	const FOnlineIdentityAccelBytePtr CastToIdentity();
+
+	bool WrapperGetSubsystem();
+
+	const IOnlineSubsystem* OnlineSubRef;
 };
